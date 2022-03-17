@@ -10,12 +10,15 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
 
 public class MainController {
     public GUIFactory factory;
-    public PianoRoll pianoRoll;
+    public static PianoRoll pianoRoll;
     public BorderPane borderPane;
-    public Sequence sequence;
+    public static Sequence sequence;
+    public Stack<SequenceSnapshot> sequenceSnapshots;
 
     public void initialize() {
         System.out.println("Initialized");
@@ -26,10 +29,9 @@ public class MainController {
         factory = new DarkFactory();
         pianoRoll = factory.createPianoRoll();
         sequence = new Sequence();
-        sequence.setNote(0, "A");
-        sequence.setNote(2, "C");
-        sequence.setNote(4, "E");
-        sequence.setNote(5, "E");
+        pianoRoll.setSequence(sequence);
+        sequenceSnapshots = new Stack<>();
+        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
     }
 
     public void newButtonClick(ActionEvent actionEvent) {
@@ -54,21 +56,52 @@ public class MainController {
     }
 
     public void playButtonClick(ActionEvent actionEvent) {
+        pianoRoll.getSequence().play();
     }
 
     public void darkButtonClick(ActionEvent actionEvent) {
+        System.out.println("Switching to dark mode");
         factory = new DarkFactory();
+        Sequence oldSequence = pianoRoll.getSequence();
+        System.out.println("Sequence before switch: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
+        Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
         pianoRoll = factory.createPianoRoll();
+        pianoRoll.setSequence(oldSequence);
+        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
+        System.out.println("Sequence after switch: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
+        pianoRoll.draw();
         update();
     }
 
     public void lightButtonClick(ActionEvent actionEvent) {
         factory = new LightFactory();
+        Sequence oldSequence = pianoRoll.getSequence();
+        Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
         pianoRoll = factory.createPianoRoll();
+        pianoRoll.setSequence(oldSequence);
+        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
+        pianoRoll.draw();
         update();
+    }
+
+    public static void setSequence(Sequence newSequence) {
+        sequence = newSequence;
+        pianoRoll.setSequence(sequence);
     }
 
     public void update() {
         borderPane.setCenter(pianoRoll);
+    }
+
+    public void undoButtonClick(ActionEvent actionEvent) {
+        pianoRoll.undo();
     }
 }

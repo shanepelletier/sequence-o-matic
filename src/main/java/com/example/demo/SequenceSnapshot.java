@@ -1,15 +1,25 @@
 package com.example.demo;
 
 public class SequenceSnapshot {
+    PianoRoll pianoRoll;
     Sequence sequence;
-    String[] notes;
 
-    public SequenceSnapshot(Sequence sequence, String[] notes) {
+    public SequenceSnapshot(PianoRoll pianoRoll, Sequence sequence) {
+        this.pianoRoll = pianoRoll;
         this.sequence = sequence;
-        this.notes = notes;
+        System.out.println("Creating snapshot with sequence: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
     }
 
     public void restore() {
-        sequence.setNotes(notes);
+        System.out.println("Restoring snapshot with sequence: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
+        MainController.setSequence(sequence);
     }
 }

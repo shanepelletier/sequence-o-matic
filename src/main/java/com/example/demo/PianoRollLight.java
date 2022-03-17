@@ -7,10 +7,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
+import java.util.Stack;
+
 public class PianoRollLight extends PianoRoll {
     private final Canvas canvas;
 
-    private final String[] KEY_NAMES = {"A", "G", "F#", "F", "E", "D#", "D", "C#", "C", "B", "A#", "A"};
+    private final String[] KEY_NAMES = {"A5", "G4", "F#4", "F4", "E4", "D#4", "D4", "C#4", "C4", "B4", "A#4", "A4"};
+    Sequence sequence;
+    Stack<SequenceSnapshot> sequenceSnapshots;
     Rectangle[] keys;
 
     public PianoRollLight() {
@@ -21,6 +25,24 @@ public class PianoRollLight extends PianoRoll {
         Rectangle note = new Rectangle(50, 50, 50, 50);
         note.setFill(Color.GREEN);
         this.getChildren().add(note);
+
+//        sequence = new Sequence();
+//        sequenceSnapshots = new Stack<>();
+//        sequenceSnapshots.add(new SequenceSnapshot(this, sequence));
+
+        canvas.setOnMouseClicked(e -> {
+            final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
+            final double NOTE_WIDTH = (canvas.getWidth() - 40) / 24;
+
+            int noteX = (int)((e.getX() - 40) / NOTE_WIDTH);
+            int noteY = (int)(e.getY() / RECTANGLE_HEIGHT);
+
+            System.out.println("Clicked position " + noteX + ", " + noteY);
+
+            sequenceSnapshots.add(this.createSnapshot());
+            sequence.setNote(noteX, KEY_NAMES[noteY]);
+            draw();
+        });
     }
 
     protected void draw() {
@@ -42,6 +64,20 @@ public class PianoRollLight extends PianoRoll {
             gc.setFill(Color.BLACK);
             gc.fillText(KEY_NAMES[i], 20, i * RECTANGLE_HEIGHT + RECTANGLE_HEIGHT / 2);
         }
+
+        final double NOTE_WIDTH = (canvas.getWidth() - 40) / 24;
+        for (int i = 0; i < 12; ++i) {
+            for (int j = 0; j < 24; ++j) {
+                gc.setStroke(Color.WHITE);
+                gc.setFill(Color.WHEAT);
+                String note = sequence.getNote(j);
+                if (note != null && note.equals(KEY_NAMES[i])) {
+                    gc.setFill(Color.LIGHTBLUE);
+                }
+                gc.strokeRect(j * NOTE_WIDTH + 40, i * RECTANGLE_HEIGHT, j * NOTE_WIDTH + NOTE_WIDTH, i * RECTANGLE_HEIGHT + RECTANGLE_HEIGHT);
+                gc.fillRect(j * NOTE_WIDTH + 40, i * RECTANGLE_HEIGHT, j * NOTE_WIDTH + NOTE_WIDTH, i * RECTANGLE_HEIGHT + RECTANGLE_HEIGHT);
+            }
+        }
     }
 
     @Override
@@ -52,4 +88,42 @@ public class PianoRollLight extends PianoRoll {
         draw();
     }
 
+    @Override
+    protected Sequence getSequence() {
+        return sequence;
+    }
+
+    @Override
+    protected void setSequence(Sequence sequence) {
+        this.sequence = sequence;
+    }
+
+    protected void setSequenceSnapshots(Stack<SequenceSnapshot> sequenceSnapshots) {
+        this.sequenceSnapshots = sequenceSnapshots;
+    }
+
+    @Override
+    protected Stack<SequenceSnapshot> getSequenceSnapshots() {
+        return sequenceSnapshots;
+    }
+
+    protected SequenceSnapshot createSnapshot() {
+        return new SequenceSnapshot(this, sequence.clone());
+    }
+
+    @Override
+    protected void undo() {
+        System.out.println("Sequence before undoing: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
+        sequenceSnapshots.pop().restore();
+        System.out.println("Sequence after undoing: ");
+        for (String note : sequence.notes) {
+            System.out.print(note + " ");
+        }
+        System.out.println();
+        draw();
+    }
 }
