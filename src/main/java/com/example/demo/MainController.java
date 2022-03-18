@@ -34,9 +34,9 @@ public class MainController {
     }
 
     public void newButtonClick() {
-        Media sound = new Media(Objects.requireNonNull(MainApplication.class.getResource("a.wav")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        sequence.clear();
+        pianoRoll.setSequence(sequence);
+        pianoRoll.draw();
     }
 
     public void saveButtonClick() throws IOException {

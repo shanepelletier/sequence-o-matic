@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -31,6 +32,10 @@ public class Sequence {
         noteSounds.put("A4", temp);
 
         playbackTimeline = new Timeline();
+    }
+
+    public void clear() {
+        Arrays.fill(notes, null);
     }
 
     public void setNotes(String[] notes) {
