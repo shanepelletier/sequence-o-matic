@@ -11,6 +11,6 @@ public abstract class PianoRoll extends Pane {
     protected abstract void setSequence(Sequence sequence);
     protected abstract void setSequenceSnapshots(Stack<SequenceSnapshot> sequenceSnapshots);
     protected abstract Stack<SequenceSnapshot> getSequenceSnapshots();
-    protected abstract SequenceSnapshot createSnapshot();
+    protected abstract SequenceSnapshot createSnapshot() throws CloneNotSupportedException;
     protected abstract void undo();
 }

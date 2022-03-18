@@ -3,8 +3,6 @@ package com.example.demo;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Objects;
 
 public class Sequence {
     String[] notes;
-    private HashMap<String, AudioClip> noteSounds;
+    private final HashMap<String, AudioClip> noteSounds;
     Timeline playbackTimeline;
 
     public Sequence() {
@@ -48,19 +46,15 @@ public class Sequence {
     }
 
     public void play() {
-        playbackTimeline.stop();
+        playbackTimeline = new Timeline();
         for (int i = 0; i < 24; ++i) {
             // 100 bpm = 1 beat every 0.6s
-            int finalI = i;
-            KeyFrame frame = new KeyFrame(Duration.millis(i * 600), actionEvent -> {
-                noteSounds.get(notes[finalI]).play();
-            });
+            AudioClip noteToPlay = noteSounds.get(notes[i]);
+            if (noteToPlay == null) continue;
+            KeyFrame frame = new KeyFrame(Duration.millis(i * 600), actionEvent -> noteToPlay.play());
             playbackTimeline.getKeyFrames().add(frame);
         }
-//        KeyFrame endFrame = new KeyFrame(Duration.millis(24000), actionEvent -> {
-//            playbackTimeline.stop();
-//        });
-//        playbackTimeline.getKeyFrames().add(endFrame);
+
         playbackTimeline.play();
     }
 

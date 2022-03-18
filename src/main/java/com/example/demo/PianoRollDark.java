@@ -6,8 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
-
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class PianoRollDark extends PianoRoll {
@@ -23,13 +21,6 @@ public class PianoRollDark extends PianoRoll {
         keys = new Rectangle[12];
 
         this.getChildren().add(canvas);
-        Rectangle note = new Rectangle(50, 50, 50, 50);
-        note.setFill(Color.GREEN);
-        this.getChildren().add(note);
-
-//        sequence = new Sequence();
-//        sequenceSnapshots = new Stack<>();
-//        sequenceSnapshots.add(new SequenceSnapshot(this, sequence));
 
         canvas.setOnMouseClicked(e -> {
             final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
@@ -37,8 +28,6 @@ public class PianoRollDark extends PianoRoll {
 
             int noteX = (int)((e.getX() - 40) / NOTE_WIDTH);
             int noteY = (int)(e.getY() / RECTANGLE_HEIGHT);
-
-            System.out.println("Clicked position " + noteX + ", " + noteY);
 
             sequenceSnapshots.add(this.createSnapshot());
             sequence.setNote(noteX, KEY_NAMES[noteY]);
@@ -109,23 +98,12 @@ public class PianoRollDark extends PianoRoll {
     }
 
     protected SequenceSnapshot createSnapshot() {
-
         return new SequenceSnapshot(this, sequence.clone());
     }
 
     @Override
     protected void undo() {
-        System.out.println("Sequence before undoing: ");
-        for (String note : sequence.notes) {
-            System.out.print(note + " ");
-        }
-        System.out.println();
         sequenceSnapshots.pop().restore();
-        System.out.println("Sequence after undoing: ");
-        for (String note : sequence.notes) {
-            System.out.print(note + " ");
-        }
-        System.out.println();
         draw();
     }
 }
