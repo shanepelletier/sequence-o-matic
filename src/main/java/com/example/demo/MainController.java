@@ -9,6 +9,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
@@ -19,6 +20,7 @@ public class MainController {
     public BorderPane borderPane;
     public static Sequence sequence;
     public Stack<SequenceSnapshot> sequenceSnapshots;
+    SequenceFileReader fileReader;
 
     public void initialize() {
         System.out.println("Initialized");
@@ -32,6 +34,7 @@ public class MainController {
         pianoRoll.setSequence(sequence);
         sequenceSnapshots = new Stack<>();
         pianoRoll.setSequenceSnapshots(sequenceSnapshots);
+        fileReader = new SequenceFileReader();
     }
 
     public void newButtonClick(ActionEvent actionEvent) {
@@ -46,10 +49,20 @@ public class MainController {
         mediaPlayer.play();
     }
 
-    public void loadButtonClick(ActionEvent actionEvent) {
+    public void loadButtonClick(ActionEvent actionEvent) throws IOException {
         Media sound = new Media(Objects.requireNonNull(MainApplication.class.getResource("e.wav")).toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
+        SequenceFileIterator fileIterator = (SequenceFileIterator) fileReader.createIterator("sample.seq");
+        int i = 0;
+        while (fileIterator.hasMore()) {
+            String note = fileIterator.getNext();
+            System.out.println(note);
+            sequence.setNote(i, note);
+            i++;
+        }
+        pianoRoll.setSequence(sequence);
+        pianoRoll.draw();
     }
 
     public void exportButtonClick(ActionEvent actionEvent) {

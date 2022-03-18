@@ -19,7 +19,7 @@ public class Sequence {
         notes = new String[24];
         noteSounds = new HashMap<>();
         AudioClip temp = new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("a.wav")).toString());
-        noteSounds.put("A#5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("aoctave.wav")).toString()));
+        noteSounds.put("A5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("aoctave.wav")).toString()));
         noteSounds.put("G4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("g.wav")).toString()));
         noteSounds.put("F#4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("fsharp.wav")).toString()));
         noteSounds.put("F4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("f.wav")).toString()));
