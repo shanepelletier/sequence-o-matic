@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class MainApplication extends Application {
+    static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws IOException {
+        primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
         stage.setTitle("Sequence-o-matic");

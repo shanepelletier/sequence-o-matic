@@ -19,7 +19,6 @@
             <Button text="New" onAction="#newButtonClick" focusTraversable="false"/>
             <Button text="Save" onAction="#saveButtonClick" focusTraversable="false"/>
             <Button text="Load" onAction="#loadButtonClick" focusTraversable="false"/>
-            <Button text="Export" onAction="#exportButtonClick" focusTraversable="false"/>
             <Button text="Play" onAction="#playButtonClick" focusTraversable="false"/>
             <Button text="Undo" onAction="#undoButtonClick" focusTraversable="false"/>
             <Label text="Theme:"/>

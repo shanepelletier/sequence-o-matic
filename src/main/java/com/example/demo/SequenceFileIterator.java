@@ -8,8 +8,8 @@ import java.util.Scanner;
 public class SequenceFileIterator implements CustomIterator {
     Scanner inputScanner;
 
-    public SequenceFileIterator(String filename) throws IOException {
-        inputScanner = new Scanner(new File(MainApplication.class.getResource(filename).getFile()));
+    public SequenceFileIterator(File file) throws IOException {
+        inputScanner = new Scanner(file);
 
     }
 

@@ -7,8 +7,10 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
@@ -43,17 +45,24 @@ public class MainController {
         mediaPlayer.play();
     }
 
-    public void saveButtonClick(ActionEvent actionEvent) {
-        Media sound = new Media(Objects.requireNonNull(MainApplication.class.getResource("c.wav")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+    public void saveButtonClick(ActionEvent actionEvent) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        File saveFile = fileChooser.showSaveDialog(MainApplication.primaryStage);
+        FileWriter writer = new FileWriter(saveFile);
+        for (String note : sequence.notes) {
+            if (note == null) {
+                writer.write("null");
+            } else {
+                writer.write(note);
+            }
+            writer.write(" ");
+        }
+        writer.close();
     }
 
     public void loadButtonClick(ActionEvent actionEvent) throws IOException {
-        Media sound = new Media(Objects.requireNonNull(MainApplication.class.getResource("e.wav")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
-        SequenceFileIterator fileIterator = (SequenceFileIterator) fileReader.createIterator("sample.seq");
+        FileChooser fileChooser = new FileChooser();
+        SequenceFileIterator fileIterator = (SequenceFileIterator) fileReader.createIterator(fileChooser.showOpenDialog(MainApplication.primaryStage));
         int i = 0;
         while (fileIterator.hasMore()) {
             String note = fileIterator.getNext();
@@ -63,9 +72,6 @@ public class MainController {
         }
         pianoRoll.setSequence(sequence);
         pianoRoll.draw();
-    }
-
-    public void exportButtonClick(ActionEvent actionEvent) {
     }
 
     public void playButtonClick(ActionEvent actionEvent) {
