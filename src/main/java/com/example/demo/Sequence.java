@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -13,10 +14,12 @@ public class Sequence {
     String[] notes;
     private final HashMap<String, AudioClip> noteSounds;
     Timeline playbackTimeline;
+    ArrayList<SequenceSubscriber> subscribers;
 
     public Sequence() {
         notes = new String[24];
         noteSounds = new HashMap<>();
+        subscribers = new ArrayList<>();
         AudioClip temp = new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("a.wav")).toString());
         noteSounds.put("A5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("aoctave.wav")).toString()));
         noteSounds.put("G4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("g.wav")).toString()));
@@ -36,10 +39,12 @@ public class Sequence {
 
     public void clear() {
         Arrays.fill(notes, null);
+        notifySubscribers();
     }
 
     public void setNotes(String[] notes) {
         this.notes = notes;
+        notifySubscribers();
     }
 
     public String getNote(int position) {
@@ -48,6 +53,7 @@ public class Sequence {
 
     public void setNote(int position, String note) {
         notes[position] = note;
+        notifySubscribers();
     }
 
     public void play() {
@@ -67,5 +73,19 @@ public class Sequence {
         Sequence newSequence = new Sequence();
         newSequence.setNotes(this.notes.clone());
         return newSequence;
+    }
+
+    public void subscribe(SequenceSubscriber sequenceSubscriber) {
+        subscribers.add(sequenceSubscriber);
+    }
+
+    public void unsubscribe(SequenceSnapshot sequenceSubscriber) {
+        subscribers.remove(sequenceSubscriber);
+    }
+
+    public void notifySubscribers() {
+        for (SequenceSubscriber sequenceSubscriber : subscribers) {
+            sequenceSubscriber.sequenceUpdate(this);
+        }
     }
 }

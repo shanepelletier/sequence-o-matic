@@ -1,5 +1,5 @@
 package com.example.demo;
 
 public interface GUIFactory {
-    PianoRoll createPianoRoll();
+    PianoRoll createPianoRoll(Sequence sequence);
 }

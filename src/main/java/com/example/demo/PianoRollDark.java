@@ -16,11 +16,13 @@ public class PianoRollDark extends PianoRoll {
     Stack<SequenceSnapshot> sequenceSnapshots;
     Rectangle[] keys;
 
-    public PianoRollDark() {
+    public PianoRollDark(Sequence sequence) {
         canvas = new Canvas();
         keys = new Rectangle[12];
 
         this.getChildren().add(canvas);
+
+        this.sequence = sequence;
 
         canvas.setOnMouseClicked(e -> {
             final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
@@ -30,7 +32,7 @@ public class PianoRollDark extends PianoRoll {
             int noteY = (int)(e.getY() / RECTANGLE_HEIGHT);
 
             sequenceSnapshots.add(this.createSnapshot());
-            sequence.setNote(noteX, KEY_NAMES[noteY]);
+            this.sequence.setNote(noteX, KEY_NAMES[noteY]);
             draw();
         });
     }
@@ -97,13 +99,19 @@ public class PianoRollDark extends PianoRoll {
         return sequenceSnapshots;
     }
 
-    protected SequenceSnapshot createSnapshot() {
+    protected SequenceSnapshot createSnapshot(){
         return new SequenceSnapshot(this, sequence.clone());
     }
 
     @Override
     protected void undo() {
         sequenceSnapshots.pop().restore();
+        draw();
+    }
+
+    @Override
+    public void sequenceUpdate(Sequence sequence) {
+        this.sequence = sequence;
         draw();
     }
 }

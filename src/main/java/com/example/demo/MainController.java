@@ -18,6 +18,7 @@ public class MainController {
     public static Sequence sequence;
     public Stack<SequenceSnapshot> sequenceSnapshots;
     SequenceFileReader fileReader;
+    SequenceSubscriber subscriber;
 
     public void initialize() {
         this.borderPane.setCenter(pianoRoll);
@@ -25,18 +26,18 @@ public class MainController {
 
     public MainController() {
         factory = new DarkFactory();
-        pianoRoll = factory.createPianoRoll();
         sequence = new Sequence();
-        pianoRoll.setSequence(sequence);
+        pianoRoll = factory.createPianoRoll(sequence);
+        sequence.subscribe(pianoRoll);
+//        pianoRoll.setSequence(sequence);
         sequenceSnapshots = new Stack<>();
         pianoRoll.setSequenceSnapshots(sequenceSnapshots);
         fileReader = new SequenceFileReader();
+
     }
 
     public void newButtonClick() {
         sequence.clear();
-        pianoRoll.setSequence(sequence);
-        pianoRoll.draw();
     }
 
     public void saveButtonClick() throws IOException {
@@ -60,8 +61,6 @@ public class MainController {
             sequence.setNote(i, note);
             i++;
         }
-        pianoRoll.setSequence(sequence);
-        pianoRoll.draw();
     }
 
     public void playButtonClick() {
@@ -73,11 +72,10 @@ public class MainController {
         Sequence oldSequence = pianoRoll.getSequence();
 
         Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
-        pianoRoll = factory.createPianoRoll();
-        pianoRoll.setSequence(oldSequence);
+        pianoRoll = factory.createPianoRoll(oldSequence);
+        sequence.subscribe(pianoRoll);
         pianoRoll.setSequenceSnapshots(sequenceSnapshots);
 
-        pianoRoll.draw();
         update();
     }
 
@@ -85,16 +83,14 @@ public class MainController {
         factory = new LightFactory();
         Sequence oldSequence = pianoRoll.getSequence();
         Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
-        pianoRoll = factory.createPianoRoll();
-        pianoRoll.setSequence(oldSequence);
+        pianoRoll = factory.createPianoRoll(oldSequence);
+        sequence.subscribe(pianoRoll);
         pianoRoll.setSequenceSnapshots(sequenceSnapshots);
-        pianoRoll.draw();
         update();
     }
 
     public static void setSequence(Sequence newSequence) {
-        sequence = newSequence;
-        pianoRoll.setSequence(sequence);
+        sequence.setNotes(newSequence.notes);
     }
 
     public void update() {
@@ -104,4 +100,5 @@ public class MainController {
     public void undoButtonClick() {
         pianoRoll.undo();
     }
+
 }
