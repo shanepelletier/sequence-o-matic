@@ -14,7 +14,6 @@ public class MainController {
     public static PianoRoll pianoRoll;
     public BorderPane borderPane;
     public static Sequence sequence;
-    public final Stack<SequenceSnapshot> sequenceSnapshots;
     final SequenceFileReader fileReader;
 
     public void initialize() {
@@ -26,8 +25,6 @@ public class MainController {
         sequence = new Sequence();
         pianoRoll = factory.createPianoRoll(sequence);
         sequence.subscribe(pianoRoll);
-        sequenceSnapshots = new Stack<>();
-        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
         fileReader = new SequenceFileReader();
 
     }
@@ -68,10 +65,8 @@ public class MainController {
         factory = new DarkFactory();
         Sequence oldSequence = pianoRoll.getSequence();
 
-        Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
         pianoRoll = factory.createPianoRoll(oldSequence);
         sequence.subscribe(pianoRoll);
-        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
 
         update();
     }
@@ -79,10 +74,8 @@ public class MainController {
     public void lightButtonClick() {
         factory = new LightFactory();
         Sequence oldSequence = pianoRoll.getSequence();
-        Stack<SequenceSnapshot> sequenceSnapshots = pianoRoll.getSequenceSnapshots();
         pianoRoll = factory.createPianoRoll(oldSequence);
         sequence.subscribe(pianoRoll);
-        pianoRoll.setSequenceSnapshots(sequenceSnapshots);
         update();
     }
 

@@ -11,7 +11,7 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
 
     protected final String[] KEY_NAMES = {"A5", "G5", "F#5", "F5", "E5", "D#5", "D5", "C#5", "C5", "B4", "A#4", "A4"};
     protected Sequence sequence;
-    protected Stack<SequenceSnapshot> sequenceSnapshots;
+    protected Stack<Sequence.SequenceMemento> history;
     protected final Rectangle[] keys;
 
     protected PianoRoll(Sequence sequence) {
@@ -21,6 +21,7 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
         this.getChildren().add(canvas);
 
         this.sequence = sequence;
+        history = new Stack<>();
 
         canvas.setOnMouseClicked(e -> {
             final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
@@ -29,7 +30,8 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
             int noteX = (int)((e.getX() - 40) / NOTE_WIDTH);
             int noteY = (int)(e.getY() / RECTANGLE_HEIGHT);
 
-            sequenceSnapshots.add(this.createSnapshot());
+            Sequence.SequenceMemento memento = sequence.save();
+            history.push(memento);
             this.sequence.setNote(noteX, KEY_NAMES[noteY]);
             draw();
         });
@@ -44,20 +46,9 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
 
     protected Sequence getSequence() { return sequence; }
 
-    protected void setSequenceSnapshots(Stack<SequenceSnapshot> sequenceSnapshots) {
-        this.sequenceSnapshots = sequenceSnapshots;
-    }
-
-    protected Stack<SequenceSnapshot> getSequenceSnapshots() {
-        return sequenceSnapshots;
-    }
-
-    protected SequenceSnapshot createSnapshot(){
-        return new SequenceSnapshot(this, sequence.clone());
-    }
-
     protected void undo() {
-        sequenceSnapshots.pop().restore();
+        Sequence.SequenceMemento memento = history.pop();
+        sequence.restore(memento);
         draw();
     }
 

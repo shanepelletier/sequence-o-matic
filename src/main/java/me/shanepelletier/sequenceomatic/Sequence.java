@@ -42,13 +42,32 @@ public class Sequence {
         subscribers.add(sequenceSubscriber);
     }
 
-    public void unsubscribe(SequenceSnapshot sequenceSubscriber) {
-        subscribers.remove(sequenceSubscriber);
-    }
 
     public void notifySubscribers() {
         for (SequenceSubscriber sequenceSubscriber : subscribers) {
             sequenceSubscriber.sequenceUpdate(this);
+        }
+    }
+
+    public SequenceMemento save() {
+        return new SequenceMemento(notes.clone());
+    }
+
+    public void restore(SequenceMemento memento) {
+        notes = memento.getNotes();
+        System.out.println();
+        notifySubscribers();
+    }
+
+    static class SequenceMemento {
+        String[] notes;
+
+        SequenceMemento(String[] notes) {
+            this.notes = notes;
+        }
+
+        String[] getNotes() {
+            return notes;
         }
     }
 }
