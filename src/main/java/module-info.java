@@ -4,6 +4,6 @@ module com.example.demo {
     requires javafx.media;
 
 
-    opens com.example.demo to javafx.fxml;
-    exports com.example.demo;
+    opens me.shanepelletier.sequenceomatic to javafx.fxml;
+    exports me.shanepelletier.sequenceomatic;
 }
