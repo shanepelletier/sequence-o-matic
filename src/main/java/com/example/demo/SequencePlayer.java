@@ -35,10 +35,18 @@ public class SequencePlayer {
 
     public void play() {
         playbackTimeline = new Timeline();
-        for (int i = 0; i < 24; ++i) {
+
+        /*
+         * Playing the first audio clip within about 100ms of timeline start results in no sound, so either play the
+         * first clip immediately or add a delay to the start of the timeline.
+         */
+        AudioClip first = noteSounds.get(sequence.getNote(0));
+        first.play();
+
+        for (int i = 1; i < 24; ++i) {
             AudioClip noteToPlay = noteSounds.get(sequence.getNote(i));
             if (noteToPlay == null) continue;
-            KeyFrame frame = new KeyFrame(Duration.millis(i * 400), actionEvent -> noteToPlay.play());
+            KeyFrame frame = new KeyFrame(Duration.millis(i * 600), actionEvent -> noteToPlay.play());
             playbackTimeline.getKeyFrames().add(frame);
         }
 
