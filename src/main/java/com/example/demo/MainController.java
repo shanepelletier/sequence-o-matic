@@ -64,7 +64,8 @@ public class MainController {
     }
 
     public void playButtonClick() {
-        pianoRoll.getSequence().play();
+        SequencePlayer player = new SequencePlayer(pianoRoll.getSequence());
+        player.play();
     }
 
     public void darkButtonClick() {
