@@ -1,40 +1,15 @@
 package me.shanepelletier.sequenceomatic;
 
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
-import java.util.Stack;
 
 public class PianoRollDark extends PianoRoll {
-    private final Canvas canvas;
-
-    private final String[] KEY_NAMES = {"A5", "G5", "F#5", "F5", "E5", "D#5", "D5", "C#5", "C5", "B4", "A#4", "A4"};
-    Sequence sequence;
-    Stack<SequenceSnapshot> sequenceSnapshots;
-    Rectangle[] keys;
 
     public PianoRollDark(Sequence sequence) {
-        canvas = new Canvas();
-        keys = new Rectangle[12];
-
-        this.getChildren().add(canvas);
-
-        this.sequence = sequence;
-
-        canvas.setOnMouseClicked(e -> {
-            final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
-            final double NOTE_WIDTH = (canvas.getWidth() - 40) / 24;
-
-            int noteX = (int)((e.getX() - 40) / NOTE_WIDTH);
-            int noteY = (int)(e.getY() / RECTANGLE_HEIGHT);
-
-            sequenceSnapshots.add(this.createSnapshot());
-            this.sequence.setNote(noteX, KEY_NAMES[noteY]);
-            draw();
-        });
+        super(sequence);
     }
 
     protected void draw() {
@@ -70,48 +45,5 @@ public class PianoRollDark extends PianoRoll {
                 gc.fillRect(j * NOTE_WIDTH + 40, i * RECTANGLE_HEIGHT, j * NOTE_WIDTH + NOTE_WIDTH, i * RECTANGLE_HEIGHT + RECTANGLE_HEIGHT);
             }
         }
-    }
-
-    @Override
-    protected void layoutChildren() {
-        canvas.setWidth(this.getWidth());
-        canvas.setHeight(this.getHeight());
-
-        draw();
-    }
-
-    @Override
-    protected Sequence getSequence() {
-        return sequence;
-    }
-
-    @Override
-    protected void setSequence(Sequence sequence) {
-        this.sequence = sequence;
-    }
-
-    protected void setSequenceSnapshots(Stack<SequenceSnapshot> sequenceSnapshots) {
-        this.sequenceSnapshots = sequenceSnapshots;
-    }
-
-    @Override
-    protected Stack<SequenceSnapshot> getSequenceSnapshots() {
-        return sequenceSnapshots;
-    }
-
-    protected SequenceSnapshot createSnapshot(){
-        return new SequenceSnapshot(this, sequence.clone());
-    }
-
-    @Override
-    protected void undo() {
-        sequenceSnapshots.pop().restore();
-        draw();
-    }
-
-    @Override
-    public void sequenceUpdate(Sequence sequence) {
-        this.sequence = sequence;
-        draw();
     }
 }

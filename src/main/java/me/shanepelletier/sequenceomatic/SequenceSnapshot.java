@@ -1,8 +1,8 @@
 package me.shanepelletier.sequenceomatic;
 
 public class SequenceSnapshot {
-    PianoRoll pianoRoll;
-    Sequence sequence;
+    final PianoRoll pianoRoll;
+    final Sequence sequence;
 
     public SequenceSnapshot(PianoRoll pianoRoll, Sequence sequence) {
         this.pianoRoll = pianoRoll;

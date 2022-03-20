@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Sequence {
     String[] notes;
-    ArrayList<SequenceSubscriber> subscribers;
+    final ArrayList<SequenceSubscriber> subscribers;
 
     public Sequence() {
         notes = new String[24];

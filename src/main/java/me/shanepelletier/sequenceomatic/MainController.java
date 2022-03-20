@@ -14,8 +14,8 @@ public class MainController {
     public static PianoRoll pianoRoll;
     public BorderPane borderPane;
     public static Sequence sequence;
-    public Stack<SequenceSnapshot> sequenceSnapshots;
-    SequenceFileReader fileReader;
+    public final Stack<SequenceSnapshot> sequenceSnapshots;
+    final SequenceFileReader fileReader;
 
     public void initialize() {
         this.borderPane.setCenter(pianoRoll);
