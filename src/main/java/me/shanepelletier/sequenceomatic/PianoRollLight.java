@@ -12,7 +12,7 @@ import java.util.Stack;
 public class PianoRollLight extends PianoRoll {
     private final Canvas canvas;
 
-    private final String[] KEY_NAMES = {"A5", "G4", "F#4", "F4", "E4", "D#4", "D4", "C#4", "C4", "B4", "A#4", "A4"};
+    private final String[] KEY_NAMES = {"A5", "G5", "F#5", "F5", "E5", "D#5", "D5", "C#5", "C5", "B4", "A#4", "A4"};
     Sequence sequence;
     Stack<SequenceSnapshot> sequenceSnapshots;
     Rectangle[] keys;

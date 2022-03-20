@@ -18,14 +18,14 @@ public class SequencePlayer {
 
         noteSounds = new HashMap<>();
         noteSounds.put("A5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("aoctave.wav")).toString()));
-        noteSounds.put("G4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("g.wav")).toString()));
-        noteSounds.put("F#4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("fsharp.wav")).toString()));
-        noteSounds.put("F4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("f.wav")).toString()));
-        noteSounds.put("E4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("e.wav")).toString()));
-        noteSounds.put("D#4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("dsharp.wav")).toString()));
-        noteSounds.put("D4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("d.wav")).toString()));
-        noteSounds.put("C#4",new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("csharp.wav")).toString()));
-        noteSounds.put("C4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("c.wav")).toString()));
+        noteSounds.put("G5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("g.wav")).toString()));
+        noteSounds.put("F#5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("fsharp.wav")).toString()));
+        noteSounds.put("F5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("f.wav")).toString()));
+        noteSounds.put("E5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("e.wav")).toString()));
+        noteSounds.put("D#5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("dsharp.wav")).toString()));
+        noteSounds.put("D5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("d.wav")).toString()));
+        noteSounds.put("C#5",new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("csharp.wav")).toString()));
+        noteSounds.put("C5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("c.wav")).toString()));
         noteSounds.put("B4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("b.wav")).toString()));
         noteSounds.put("A#4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("asharp.wav")).toString()));
         noteSounds.put("A4", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("a.wav")).toString()));

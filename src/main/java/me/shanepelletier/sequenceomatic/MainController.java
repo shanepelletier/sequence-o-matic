@@ -16,7 +16,6 @@ public class MainController {
     public static Sequence sequence;
     public Stack<SequenceSnapshot> sequenceSnapshots;
     SequenceFileReader fileReader;
-    SequenceSubscriber subscriber;
 
     public void initialize() {
         this.borderPane.setCenter(pianoRoll);
@@ -27,7 +26,6 @@ public class MainController {
         sequence = new Sequence();
         pianoRoll = factory.createPianoRoll(sequence);
         sequence.subscribe(pianoRoll);
-//        pianoRoll.setSequence(sequence);
         sequenceSnapshots = new Stack<>();
         pianoRoll.setSequenceSnapshots(sequenceSnapshots);
         fileReader = new SequenceFileReader();
