@@ -1,4 +1,5 @@
-module com.example.demo {
+module me.shanepelletier.sequenceomatic {
+    requires javafx.controls;
     requires javafx.graphics;
     requires javafx.base;
     requires javafx.fxml;
