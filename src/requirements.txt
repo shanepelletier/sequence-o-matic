@@ -1,0 +1,4 @@
+Requirements:
+- Java 17.0.2
+- JavaFX
+- Windows 10 or 11

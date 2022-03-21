@@ -10,7 +10,6 @@ public class Sequence {
     public Sequence() {
         notes = new String[24];
         subscribers = new ArrayList<>();
-
     }
 
     public void clear() {
@@ -30,12 +29,6 @@ public class Sequence {
     public void setNote(int position, String note) {
         notes[position] = note;
         notifySubscribers();
-    }
-
-    public Sequence clone() {
-        Sequence newSequence = new Sequence();
-        newSequence.setNotes(this.notes.clone());
-        return newSequence;
     }
 
     public void subscribe(SequenceSubscriber sequenceSubscriber) {

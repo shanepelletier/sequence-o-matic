@@ -14,7 +14,7 @@ public class SequencePlayer {
     private final HashMap<String, AudioClip> noteSounds;
 
     public SequencePlayer(Sequence sequence) {
-        this.sequence = sequence.clone();
+        this.sequence = sequence;
 
         noteSounds = new HashMap<>();
         noteSounds.put("A5", new AudioClip(Objects.requireNonNull(MainApplication.class.getResource("aoctave.wav")).toString()));
