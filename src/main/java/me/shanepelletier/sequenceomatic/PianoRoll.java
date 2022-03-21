@@ -1,9 +1,11 @@
 package me.shanepelletier.sequenceomatic;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Objects;
 import java.util.Stack;
 
 public abstract class PianoRoll extends Pane implements SequenceSubscriber {
@@ -11,19 +13,20 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
 
     protected final String[] KEY_NAMES = {"A5", "G5", "F#5", "F5", "E5", "D#5", "D5", "C#5", "C5", "B4", "A#4", "A4"};
     protected Sequence sequence;
-    protected Stack<Sequence.SequenceMemento> history;
+    protected final Stack<Sequence.SequenceMemento> history;
     protected final Rectangle[] keys;
 
-    protected PianoRoll(Sequence sequence) {
+    protected PianoRoll(Sequence sequence, Stack<Sequence.SequenceMemento> history) {
         canvas = new Canvas();
         keys = new Rectangle[12];
 
         this.getChildren().add(canvas);
 
         this.sequence = sequence;
-        history = new Stack<>();
+        this.history = history;
 
         canvas.setOnMouseClicked(e -> {
+
             final double RECTANGLE_HEIGHT = canvas.getHeight() / 12;
             final double NOTE_WIDTH = (canvas.getWidth() - 40) / 24;
 
@@ -32,7 +35,15 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
 
             Sequence.SequenceMemento memento = sequence.save();
             history.push(memento);
-            this.sequence.setNote(noteX, KEY_NAMES[noteY]);
+
+            if (e.getButton() == MouseButton.PRIMARY) {
+                this.sequence.setNote(noteX, KEY_NAMES[noteY]);
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                if (Objects.equals(this.sequence.getNote(noteX), KEY_NAMES[noteY])) {
+                    this.sequence.setNote(noteX, null);
+                }
+            }
+
             draw();
         });
     }
@@ -45,6 +56,10 @@ public abstract class PianoRoll extends Pane implements SequenceSubscriber {
     }
 
     protected Sequence getSequence() { return sequence; }
+
+    protected Stack<Sequence.SequenceMemento> getHistory() {
+        return history;
+    }
 
     protected void undo() {
         Sequence.SequenceMemento memento = history.pop();

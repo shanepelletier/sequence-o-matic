@@ -23,7 +23,7 @@ public class MainController {
     public MainController() {
         factory = new DarkFactory();
         sequence = new Sequence();
-        pianoRoll = factory.createPianoRoll(sequence);
+        pianoRoll = factory.createPianoRoll(sequence, new Stack<>());
         sequence.subscribe(pianoRoll);
         fileReader = new SequenceFileReader();
 
@@ -37,7 +37,7 @@ public class MainController {
         FileChooser fileChooser = new FileChooser();
         File saveFile = fileChooser.showSaveDialog(MainApplication.primaryStage);
         FileWriter writer = new FileWriter(saveFile);
-        for (String note : sequence.notes) {
+        for (String note : sequence.getNotes()) {
             writer.write(Objects.requireNonNullElse(note, "null"));
             writer.write(" ");
         }
@@ -46,10 +46,10 @@ public class MainController {
 
     public void loadButtonClick() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        SequenceFileIterator fileIterator = (SequenceFileIterator) fileReader.createIterator(fileChooser.showOpenDialog(MainApplication.primaryStage));
+        CustomIterator iterator = fileReader.createIterator(fileChooser.showOpenDialog(MainApplication.primaryStage));
         int i = 0;
-        while (fileIterator.hasMore()) {
-            String note = fileIterator.getNext();
+        while (iterator.hasMore()) {
+            String note = iterator.getNext();
             System.out.println(note);
             sequence.setNote(i, note);
             i++;
@@ -64,8 +64,9 @@ public class MainController {
     public void darkButtonClick() {
         factory = new DarkFactory();
         Sequence oldSequence = pianoRoll.getSequence();
+        Stack<Sequence.SequenceMemento> history = pianoRoll.getHistory();
 
-        pianoRoll = factory.createPianoRoll(oldSequence);
+        pianoRoll = factory.createPianoRoll(oldSequence, history);
         sequence.subscribe(pianoRoll);
 
         update();
@@ -74,13 +75,12 @@ public class MainController {
     public void lightButtonClick() {
         factory = new LightFactory();
         Sequence oldSequence = pianoRoll.getSequence();
-        pianoRoll = factory.createPianoRoll(oldSequence);
-        sequence.subscribe(pianoRoll);
-        update();
-    }
+        Stack<Sequence.SequenceMemento> history = pianoRoll.getHistory();
 
-    public static void setSequence(Sequence newSequence) {
-        sequence.setNotes(newSequence.notes);
+        pianoRoll = factory.createPianoRoll(oldSequence, history);
+        sequence.subscribe(pianoRoll);
+
+        update();
     }
 
     public void update() {

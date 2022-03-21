@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Sequence {
-    String[] notes;
-    final ArrayList<SequenceSubscriber> subscribers;
+    private String[] notes;
+    private final ArrayList<SequenceSubscriber> subscribers;
 
     public Sequence() {
         notes = new String[24];
@@ -17,9 +17,8 @@ public class Sequence {
         notifySubscribers();
     }
 
-    public void setNotes(String[] notes) {
-        this.notes = notes;
-        notifySubscribers();
+    public String[] getNotes() {
+        return notes.clone();
     }
 
     public String getNote(int position) {
@@ -52,8 +51,8 @@ public class Sequence {
         notifySubscribers();
     }
 
-    static class SequenceMemento {
-        String[] notes;
+    public static class SequenceMemento {
+        final private String[] notes;
 
         SequenceMemento(String[] notes) {
             this.notes = notes;

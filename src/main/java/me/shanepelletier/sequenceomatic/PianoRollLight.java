@@ -6,11 +6,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
+import java.util.Stack;
+
 public class PianoRollLight extends PianoRoll {
 
-
-    public PianoRollLight(Sequence sequence) {
-        super(sequence);
+    public PianoRollLight(Sequence sequence, Stack<Sequence.SequenceMemento> history) {
+        super(sequence, history);
     }
 
     protected void draw() {
