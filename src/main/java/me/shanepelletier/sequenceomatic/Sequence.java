@@ -47,7 +47,6 @@ public class Sequence {
 
     public void restore(SequenceMemento memento) {
         notes = memento.getNotes();
-        System.out.println();
         notifySubscribers();
     }
 
